@@ -4,7 +4,8 @@ import notification from 'ant-design-vue/es/notification'
 const service = axios.create({
     // baseURL: process.env.BASE_URL,
     timeout: 30000, // 请求超时时间
-    baseURL: process.env.VUE_APP_API_BASE_URL,
+    //baseURL: process.env.VUE_APP_API_BASE_URL,
+    baseURL:"http://localhost/"
 })
 const err = (error) => {
     if (error.response) {

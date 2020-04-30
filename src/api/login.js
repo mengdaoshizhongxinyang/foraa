@@ -14,7 +14,7 @@ import { axios } from '@/utils/request'
  */
 export function login (parameter) {
   return axios({
-    url: '/auth/login',
+    url: '/api/login',
     method: 'post',
     data: parameter
   })
@@ -35,13 +35,6 @@ export function getInfo () {
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
     }
-  })
-}
-
-export function getCurrentUserNav (token) {
-  return axios({
-    url: '/user/nav',
-    method: 'get'
   })
 }
 

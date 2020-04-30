@@ -19,7 +19,7 @@
         type="error"
         showIcon
         style="margin-bottom: 24px;"
-        message="验证码错误"
+        :message="message"
       />
       <a-form-item>
         <a-input
@@ -99,7 +99,8 @@ export default {
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
         smsSendBtn: false
-      }
+      },
+      message:"验证码错误"
     };
   },
   methods: {
@@ -210,10 +211,11 @@ export default {
     },
     requestFailed(err) {
       this.isLoginError = true;
+      this.message=err.message || "请求出现错误，请稍后再试",
       this.$notification["error"]({
         message: "错误",
         description:
-          ((err.response || {}).data || {}).message ||
+          err.message ||
           "请求出现错误，请稍后再试",
         duration: 4
       });

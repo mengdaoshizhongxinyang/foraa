@@ -4,7 +4,7 @@ import router from './router'
 import Antd from 'ant-design-vue'
 import store from './store/'
 import Storage from 'vue-ls'
-import './mock'
+// import './mock'
 import 'ant-design-vue/dist/antd.css'
 import Directives from '@/utils/directives.js';
 const options = {

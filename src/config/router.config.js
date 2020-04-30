@@ -1,3 +1,5 @@
+import vue from "vue";
+import { userInfo } from "os";
 export const asyncRouterMap=[
     // {
     //     path: '/',
@@ -15,6 +17,14 @@ export const asyncRouterMap=[
         path: '/',
         name: 'layout',
         component:()=>import ('@/layouts/BaseView.vue'),
+        beforeEnter:((to, from, next) => {
+            if(vue.ls.get('User').id){
+                next();
+            }else{
+                next({name:'login'})
+            }
+            
+        }),
         children:[
             {
                 path: '/',

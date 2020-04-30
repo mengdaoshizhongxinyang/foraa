@@ -17,6 +17,7 @@
     "postprocessing": "^6.8.8",
     "text-loader": "^0.0.1",
     "three": "^0.110.0",
+    "vant": "^2.7.1",
     "vue": "^2.6.10",
     "vue-loader": "^15.7.1",
     "vue-ls": "^3.2.1",

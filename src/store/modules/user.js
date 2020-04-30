@@ -31,12 +31,20 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
           
-          const result = response.result
-          console.log(Vue)
-          Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
+          const result = response
+          console.log(result)
+          if(result.errcode===0){
+            Vue.ls.set('User', result.result, 7 * 24 * 60 * 60 * 1000)
           
-          commit('SET_TOKEN', result.token)
-          resolve()
+            commit('SET_TOKEN', result.token)
+            resolve()
+            
+          }
+          let err={
+            message:result.msg
+          }
+          throw err
+          
         }).catch(error => {
           reject(error)
         })
@@ -48,7 +56,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
           const result = response.result
-
+          
           if (result.role && result.role.permissions.length > 0) {
             const role = result.role
             role.permissions = result.role.permissions

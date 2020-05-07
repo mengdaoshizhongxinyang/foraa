@@ -18,7 +18,8 @@ export const asyncRouterMap=[
         name: 'layout',
         component:()=>import ('@/layouts/BaseView.vue'),
         beforeEnter:((to, from, next) => {
-            if(vue.ls.get('User').id){
+
+            if(vue.ls.get('User')){
                 next();
             }else{
                 next({name:'login'})
@@ -36,7 +37,13 @@ export const asyncRouterMap=[
                 path: '/user/info',
                 name: 'info',
                 component:()=>import ('@/views/user/Info.vue'),
-                meta:{title:'个人设置',back:true}
+                meta:{title:'个人信息',back:true}
+            },
+            {
+                path: '/user/setting',
+                name: 'setting',
+                component:()=>import ('@/views/user/Setting.vue'),
+                meta:{title:'设置',back:true}
             },
             {
                 path: '/user/advice',

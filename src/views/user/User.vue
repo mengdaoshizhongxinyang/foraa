@@ -16,7 +16,7 @@ export default {
     return {
       list: [
         { title: "个人信息", url: "/user/info" },
-        { title: "设置", url: "/user/setting" },
+        { title: "计划设置", url: "/user/setting" },
         { title: "建议反馈", url: "/user/advice" }
       ]
     };

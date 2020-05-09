@@ -14,14 +14,7 @@ import { axios } from '@/utils/request'
  */
 export function getImgs() {
     return axios({
-        url: '/api/Imgs',
-        method: 'get'
-    })
-}
-
-export function getTimeList() {
-    return axios({
-        url: '/api/timeList',
+        url: '/api/imgs',
         method: 'get'
     })
 }

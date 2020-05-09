@@ -1,9 +1,10 @@
 <template>
   <div>
-    <a-timeline mode="alternate" style="padding:16px;" v-if="plan.length">
-      <a-timeline-item v-for="(item, index) in plan" :key="index">
-        <p>{{item.do}}</p>
-        <p>{{item.start_time}}~{{item.end_time}}</p>
+    <a-timeline mode="alternate" style="padding:16px;" v-if="plans.length">
+      <a-timeline-item v-for="(item, index) in plans" :key="index">
+        <p>{{item.title}}</p>
+        <p>{{item.start}}~{{item.end}}</p>
+        <p>{{item.content}}</p>
       </a-timeline-item>
     </a-timeline>
     <div v-else>暂无计划</div>
@@ -11,7 +12,16 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props:{
+    plans:{
+      type:Array,
+      default:()=>{
+        return []
+      }
+    }
+  }
+};
 </script>
 
 <style lang="less" scoped>

@@ -31,25 +31,25 @@ export const asyncRouterMap=[
                 path: '/',
                 name: 'user',
                 component:()=>import ('@/views/user/User.vue'),
-                meta:{title:'个人中心',back:false}
+                meta:{title:'个人中心',back:false,icon:'user'}
             },
             {
                 path: '/user/info',
                 name: 'info',
                 component:()=>import ('@/views/user/Info.vue'),
-                meta:{title:'个人信息',back:true}
+                meta:{title:'个人信息',back:true,icon:'user'}
             },
             {
                 path: '/user/setting',
                 name: 'setting',
                 component:()=>import ('@/views/user/Setting.vue'),
-                meta:{title:'设置',back:true}
+                meta:{title:'设置',back:true,icon:'user'}
             },
             {
                 path: '/user/advice',
                 name: 'advice',
                 component:()=>import ('@/views/user/Advice.vue'),
-                meta:{title:'建议反馈',back:true}
+                meta:{title:'建议反馈',back:true,icon:'user'}
             },
             // {
             //     path: '/article',
@@ -67,13 +67,13 @@ export const asyncRouterMap=[
                 path: '/home',
                 name: 'daily',
                 component:()=>import ('@/views/home/Index.vue'),
-                meta:{title:'计划',back:false}
+                meta:{title:'计划',back:false,icon:'daily'}
             },
             {
                 path: '/state',
                 name: 'state',
                 component:()=>import ('@/views/state/Index.vue'),
-                meta:{title:'个人状况',back:false}
+                meta:{title:'个人状况',back:false,icon:'state'}
             }
         ]
     },

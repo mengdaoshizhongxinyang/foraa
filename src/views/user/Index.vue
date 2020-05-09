@@ -13,9 +13,6 @@ export default {
     BaseView
   },
   methods: {},
-  mounted(){
-    console.log(this.$route) 
-  }
 };
 </script>
 

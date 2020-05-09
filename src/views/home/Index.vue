@@ -10,8 +10,9 @@
     </a-divider>
     <a-timeline mode="alternate" style="padding:16px;" v-if="plan.length">
       <a-timeline-item v-for="(item, index) in plan" :key="index">
-          <p>{{item.do}}</p>
-          <p>{{item.start_time}}~{{item.end_time}}</p>
+          <p>{{item.title}}</p>
+          <p>{{item.start}}~{{item.end}}</p>
+          <p>{{item.content}}</p>
       </a-timeline-item>
     </a-timeline>
     <div v-else>
@@ -21,7 +22,8 @@
 </template>
 
 <script>
-import { getImgs,getTimeList } from "@/api/home/index.js";
+import { getImgs } from "@/api/home/index.js";
+import { getPlan } from "@/api/show/plan.js";
 export default {
   data() {
     return {
@@ -32,22 +34,24 @@ export default {
   methods: {
     getCarousels() {
       getImgs().then(res => {
-        this.imgs = res.result.data;
+        this.imgs = res.result;
       });
     },
     handleLink(options, to) {
       console.log(1);
       console.log(options, to);
     },
-    getTimePlan(){
-        getTimeList().then(res=>{
-            this.plan = res.result.data;
-        })
-    }
+    getList() {
+      getPlan(this.$ls.get("User").id).then(res => {
+        this.plan = res.result.filter(item => {
+          return item.date === 7 || item.date === this.date;
+        });
+      });
+    },
   },
   mounted() {
     this.getCarousels();
-    this.getTimePlan();
+    this.getList();
   }
 };
 </script>

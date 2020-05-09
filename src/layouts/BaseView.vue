@@ -11,7 +11,7 @@
       <router-view></router-view>
     </div>
     <div class="footer">
-      <Footer :state="state"></Footer>
+      <Footer :state="$route.meta.icon"></Footer>
     </div>
   </div>
 </template>

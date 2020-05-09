@@ -39,7 +39,11 @@ import "vant/lib/dialog/style";
 import { Toast } from "vant";
 import "vant/lib/toast/style";
 import { Chart } from "@antv/g2";
-import { getBloodPressure, addBloodPressure, delBloodPressure } from "@/api/home/state";
+import {
+  getBloodPressure,
+  addBloodPressure,
+  delBloodPressure
+} from "@/api/home/state";
 import DataSet from "@antv/data-set";
 export default {
   components: {
@@ -124,7 +128,7 @@ export default {
         })
         .catch(err => {
           toast.clear().fail({
-            message: err?err:"网络异常"
+            message: err ? err : "网络异常"
           });
         });
     },
@@ -156,7 +160,7 @@ export default {
           })
           .catch(err => {
             toast.clear().fail({
-              message: err?err:"网络异常"
+              message: err ? err : "网络异常"
             });
           });
       }
@@ -190,7 +194,11 @@ export default {
     this.chart.axis("time", {
       label: {
         formatter: val => {
-          return moment(val).format("MM-DD");
+          let a = val.split("-");
+          let arr = [];
+          arr.push(a[1]);
+          arr.push(a[2]);
+          return arr.join("-");
         }
       }
     });

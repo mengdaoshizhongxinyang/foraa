@@ -124,7 +124,7 @@ export default {
         })
         .catch(err => {
           Toast.fail({
-            message: err?err:"网络异常"
+            message: err ? err : "网络异常"
           });
         });
     },
@@ -155,7 +155,7 @@ export default {
           })
           .catch(err => {
             Toast.fail({
-              message: err?err:"网络异常"
+              message: err ? err : "网络异常"
             });
           });
       }
@@ -189,7 +189,11 @@ export default {
     this.chart.axis("time", {
       label: {
         formatter: val => {
-          return moment(val).format("MM-DD");
+          let a = val.split("-");
+          let arr = [];
+          arr.push(a[1]);
+          arr.push(a[2]);
+          return arr.join("-");
         }
       }
     });

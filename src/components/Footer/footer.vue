@@ -13,20 +13,24 @@
 <script>
 export default {
   name:"Footer",
+  props:{
+    state:{
+      type:String,
+      defaule:"user"
+    }
+  },
   data() {
     return {
       list: [
         { title: "每日", icon: "pie-chart" ,name:"daily"},
         { title: "个人状况", icon: "solution" ,name:"state"},
         { title: "用户", icon: "user" ,name:"user"}
-      ],
-      state:"user"
+      ]
     };
   },
   methods: {
     goTo(name) {
       if(name!==this.state){
-        this.state=name
         this.$router.push({name:name})
       }
       

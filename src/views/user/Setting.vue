@@ -129,6 +129,7 @@ export default {
             });
         }
       });
+      this.visible=false
     },
     getList() {
       getPlan(this.$ls.get("User").id).then(res => {

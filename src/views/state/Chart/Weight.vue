@@ -6,7 +6,7 @@
         <a-select-option value="table">表格</a-select-option>
         <a-select-option value="chart">图表</a-select-option>
       </a-select>
-      <a-select style="width: 90px" v-model="timeSelect">
+      <a-select style="width: 90px" v-model="timeSelect" @change="handleChange">
         <a-select-option value="week">近一周</a-select-option>
         <a-select-option value="month">近一月</a-select-option>
         <a-select-option value="season">近三月</a-select-option>
@@ -163,6 +163,9 @@ export default {
     },
     handleCancel() {
       this.visible = false;
+    },
+    handleChange(){
+      this.getList()
     }
   },
   mounted() {

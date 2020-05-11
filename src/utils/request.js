@@ -5,7 +5,7 @@ const service = axios.create({
     // baseURL: process.env.BASE_URL,
     timeout: 30000, // 请求超时时间
     //baseURL: process.env.VUE_APP_API_BASE_URL,
-    baseURL:"http://localhost/"
+    baseURL:"http://120.26.187.164/"
 })
 const err = (error) => {
     if (error.response) {

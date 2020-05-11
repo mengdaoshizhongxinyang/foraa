@@ -112,7 +112,6 @@ export default {
           data.start = data.start._i;
           data.end = data.end._i;
           data["user_id"] = this.$ls.get("User").id;
-          console.log(data);
           addPlan(data)
             .then(res => {
               if (res.errcode === 0) {
@@ -135,7 +134,8 @@ export default {
       getPlan(this.$ls.get("User").id).then(res => {
         this.list = res.result;
         this.filterList = this.list.filter(item => {
-          return item.date === 7 || item.date === this.date;
+          console.log(item.date,this.date)
+          return item.date === 7 || item.date == this.date;
         });
       });
     },

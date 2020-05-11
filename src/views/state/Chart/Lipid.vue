@@ -6,7 +6,7 @@
         <a-select-option value="table">表格</a-select-option>
         <a-select-option value="chart">图表</a-select-option>
       </a-select>
-      <a-select style="width: 90px" v-model="timeSelect">
+      <a-select style="width: 90px" v-model="timeSelect" @change="handleChange">
         <a-select-option value="week">近一周</a-select-option>
         <a-select-option value="month">近一月</a-select-option>
         <a-select-option value="season">近三月</a-select-option>
@@ -23,7 +23,7 @@
     <vanDialog
       v-model="visible"
       :show-cancel-button="true"
-      title="请输入体重"
+      title="请输入血脂"
       style="padding:8px;text-align:center"
       @confirm="handleConfirm"
     >
@@ -162,6 +162,9 @@ export default {
     },
     handleCancel() {
       this.visible = false;
+    },
+    handleChange(){
+      this.getList()
     }
   },
   mounted() {
@@ -175,7 +178,7 @@ export default {
     this.chart.data(this.data);
     this.chart.scale({
       num: {
-        alias: "体重",
+        alias: "血脂",
         nice: true
       },
       time: {

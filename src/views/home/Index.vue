@@ -38,13 +38,12 @@ export default {
       });
     },
     handleLink(options, to) {
-      console.log(1);
-      console.log(options, to);
+      
     },
     getList() {
       getPlan(this.$ls.get("User").id).then(res => {
         this.plan = res.result.filter(item => {
-          return item.date === 7 || item.date === this.date;
+          return item.date === 7 || item.date == this.date;
         });
       });
     },

@@ -24,11 +24,13 @@
 <script>
 import { getImgs } from "@/api/home/index.js";
 import { getPlan } from "@/api/show/plan.js";
+import moment from "moment";
 export default {
   data() {
     return {
       imgs: [],
-      plan:[]
+      plan:[],
+      date:""
     };
   },
   methods: {
@@ -43,12 +45,13 @@ export default {
     getList() {
       getPlan(this.$ls.get("User").id).then(res => {
         this.plan = res.result.filter(item => {
-          return item.date === 7 || item.date == this.date;
+          return item.date === 7 || item.date ==this.date 
         });
       });
     },
   },
   mounted() {
+    this.date=new moment().format('d');
     this.getCarousels();
     this.getList();
   }

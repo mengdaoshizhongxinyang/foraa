@@ -41,19 +41,13 @@
       </a-input>
     </a-form-item>
     <a-form-item>
-      <a-upload
-        name="avatar"
-        listType="picture-card"
-        class="avatar-uploader"
-        :showUploadList="false"
-        :beforeUpload="beforeUpload"
-        style="border-radius:50%"
+      <vanUploader
+
+        :after-read="beforeUpload"
+        v-model="fileList"
+        :max-count="1"
       >
-        <img v-if="imageUrl" :src="imageUrl" alt="avatar" style="width:100%;height:100" />
-        <div v-else>
-          <a-icon :type="loading ? 'loading' : 'plus'" />
-        </div>
-      </a-upload>
+      </vanUploader>
     </a-form-item>
     <a-form-item v-bind="tailFormItemLayout">
       <a-button type="primary" html-type="submit">提交</a-button>
@@ -67,8 +61,13 @@ function getBase64(img, callback) {
   reader.readAsDataURL(img);
   reader.addEventListener("load", () => callback(reader.result));
 }
+import { Uploader } from "vant";
+import "vant/lib/uploader/style";
 import { updateUser } from "@/api/user";
 export default {
+  components:{
+    vanUploader:Uploader
+  },
   data() {
     return {
       formItemLayout: {
@@ -94,6 +93,7 @@ export default {
         }
       },
       imageUrl: "",
+      fileList:[],
       loading: false
     };
   },
@@ -135,19 +135,15 @@ export default {
       }
     },
     beforeUpload(file) {
+      console.log(file)
       this.loading = true;
-      console.log(file);
-      const isJPG = ~file.type.indexOf("image");
+      const isJPG = ~file.file.type.indexOf("image");
       if (!isJPG) {
         this.$message.error("你只能上传图片");
       } else {
-        getBase64(file, imageUrl => {
-          this.imageUrl = imageUrl;
-          this.loading = false;
-        });
+          this.imageUrl = file.content;
       }
 
-      return false;
     }
   },
   mounted() {
@@ -157,7 +153,7 @@ export default {
       name: user.name ? user.name : "",
       mobile: user.mobile
     });
-    this.imageUrl = user.avatar;
+    this.fileList.push({content:user.avatar})
   }
 };
 </script>

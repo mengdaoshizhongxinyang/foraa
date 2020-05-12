@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="logo">
-      <img src="/img/health.png" alt />
+      <img :src="img" alt />
       <div>
         <div>(●—●)</div>
         <div>您的私人健康顾问</div>
@@ -97,7 +97,8 @@ export default {
         loginType: 0,
         smsSendBtn: false
       },
-      message:"验证码错误"
+      message:"验证码错误",
+      img:"./img/health.png"
     };
   },
   methods: {

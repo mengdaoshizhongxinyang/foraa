@@ -1,23 +1,23 @@
 <template>
   <div>
     <a-form :form="form" style="max-width: 500px; margin: 40px auto 0;">
-      <a-form-item label="记录时间" :labelCol="labelCol" :wrapperCol="wrapperCol">{{firstData.time}}</a-form-item>
+      <a-form-item label="记录时间" :labelCol="labelCol" :wrapperCol="wrapperCol">{{firstData.time}}</a-form-item> //设置标签和标签大小
       <a-form-item label="详细信息记录" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-input
-          placeholder="简述"
+          placeholder="简述"  //提供可描述输入字段预期值的提示信息
           :rows="4"
           v-decorator="['title']"
         ></a-input>
       </a-form-item>
       <a-form-item label="详细信息记录" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <a-textarea
-          placeholder="详细记录"
+        <a-textarea          //定义文本框
+          placeholder="详细记录"   //提供可描述输入字段预期值的提示信息
           :rows="4"
-          v-decorator="['content', { rules: [{required: true, message: '详细记录必填'}] }]"
+          v-decorator="['content', { rules: [{required: true, message: '详细记录必填'}] }]"    //设置填写规则
         ></a-textarea>
       </a-form-item>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
-        <a-button :loading="loading" type="primary" @click="finish">提交</a-button>
+        <a-button :loading="loading" type="primary" @click="finish">提交</a-button> //设置按钮
         <a-button style="margin-left: 8px" @click="prevStep">上一步</a-button>
       </a-form-item>
     </a-form>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { Toast } from "vant";
+import { Toast } from "vant"; //引用组件
 import "vant/lib/toast/style";
 
 import { addEating, delEating } from "@/api/home/eating.js";

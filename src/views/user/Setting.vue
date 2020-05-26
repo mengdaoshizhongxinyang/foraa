@@ -111,8 +111,8 @@ export default {
         if (!err) {
           let data = { ...values };
           console.log(data.start);
-          data.start = data.start._i;
-          data.end = data.end._i;
+          data.start = data.start.format('HH:mm');
+          data.end = data.end.format('HH:mm');
           data["user_id"] = this.$ls.get("User").id;
           addPlan(data)
             .then(res => {

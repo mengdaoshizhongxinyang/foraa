@@ -40,15 +40,7 @@
         </a-select>
       </a-input>
     </a-form-item>
-    <a-form-item>
-      <vanUploader
-
-        :after-read="beforeUpload"
-        v-model="fileList"
-        :max-count="1"
-      >
-      </vanUploader>
-    </a-form-item>
+    
     <a-form-item v-bind="tailFormItemLayout">
       <a-button type="primary" html-type="submit">提交</a-button>
     </a-form-item>

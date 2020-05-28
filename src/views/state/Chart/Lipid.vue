@@ -200,7 +200,6 @@ export default {
         }
       }
     });
-    this.chart.area().position("time*num");
     this.chart.line().position("time*num");
     this.chart.render();
     this.getList();

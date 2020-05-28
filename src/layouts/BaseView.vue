@@ -80,6 +80,7 @@ export default {
 }
 .body{
   height:100%;
+  overflow-x: hidden;
 }
 .footer {
   width: 100%;

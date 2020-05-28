@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-
+import {getPlan} from '@/api/show/plan'
 const user = {
   state: {
     token: '',
     name: '',
     avatar: '',
-    info: {}
+    info: {},
+    plan:[]
   },
 
   mutations: {
@@ -22,6 +23,9 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_PLAN:(state,plan)=>{
+      state.plan=plan
     }
   },
 
@@ -30,21 +34,17 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          
           const result = response
-          console.log(result)
           if(result.errcode===0){
             Vue.ls.set('User', result.result, 7 * 24 * 60 * 60 * 1000)
-          
             commit('SET_TOKEN', result.token)
             resolve()
-            
+          }else{
+            let err={
+              message:result.msg
+            }
+            throw err
           }
-          let err={
-            message:result.msg
-          }
-          throw err
-          
         }).catch(error => {
           reject(error)
         })

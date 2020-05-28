@@ -101,7 +101,11 @@ export default {
     Plan
   },
   methods: {
-    handleChange(v) {},
+    handleChange(v) {
+      this.filterList = this.list.filter(item => {
+          return item.date === 7 || item.date == this.date;
+        });
+    },
     showModal() {
       this.visible = true;
     },

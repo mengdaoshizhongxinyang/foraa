@@ -163,8 +163,8 @@ export default {
     handleCancel() {
       this.visible = false;
     },
-    handleChange(){
-      this.getList()
+    handleChange() {
+      this.getList();
     }
   },
   mounted() {
@@ -178,29 +178,39 @@ export default {
     this.chart.data(this.data);
     this.chart.scale({
       num: {
-        alias: "血脂",
-        nice: true
+        max: 240,
+      }
+    });
+    this.chart.line().position('time*num');
+    this.chart.point().position('time*num').shape('breath-point');
+    this.chart.annotation().regionFilter({
+      top: true,
+      start: ['min', 105],
+      end: ['max', 85],
+      color: '#ff4d4f'
+    });
+    this.chart.annotation().line({
+      start: ['min', 200],
+      end: ['max', 200],
+      style: {
+        stroke: '#ff4d4f',
+        lineWidth: 1,
+        lineDash: [3, 3]
       },
-      time: {
-        range: [0, 1]
+      text: {
+        position: 'start',
+        style: {
+          fill: '#8c8c8c',
+          fontSize: 15,
+          fontWeight: 'normal'
+        },
+        content: '危险线',
+        offsetY: -5
       }
     });
-    this.chart.tooltip({
-      showCrosshairs: true,
-      shared: true
-    });
-    this.chart.axis("time", {
-      label: {
-        formatter: val => {
-          let a = val.split("-");
-          let arr = [];
-          arr.push(a[1]);
-          arr.push(a[2]);
-          return arr.join("-");
-        }
-      }
-    });
-    this.chart.line().position("time*num");
+
+    this.chart.removeInteraction('legend-filter');
+    this.chart.removeInteraction('legend-active');
     this.chart.render();
     this.getList();
   }

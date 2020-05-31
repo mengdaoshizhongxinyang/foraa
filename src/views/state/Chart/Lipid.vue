@@ -13,7 +13,14 @@
       </a-select>
     </div>
     <div id="c3" v-show="show!=='table'" style="padding:10px;"></div>
-    <a-table bordered :data-source="data" :columns="columns" v-show="show==='table'" rowKey="id">
+    <a-table
+      bordered
+      :data-source="data"
+      :columns="columns"
+      v-show="show==='table'"
+      rowKey="id"
+      :pagination="{pageSize:5}"
+    >
       <template slot="operation" slot-scope="text, record">
         <a-popconfirm v-if="data.length" title="确定删除？" @confirm="() => onDelete(record.id)">
           <a-button type="danger">删除</a-button>
@@ -27,7 +34,7 @@
       style="padding:8px;text-align:center"
       @confirm="handleConfirm"
     >
-      <a-input-number v-model="num" style="margin:8px;" :min="0"></a-input-number>
+      <a-input-number v-model="num" style="margin:8px;" :min="0"></a-input-number>毫克/分升
     </vanDialog>
   </div>
 </template>
@@ -107,26 +114,24 @@ export default {
           .subtract(3, "months")
           .format("YYYY-MM-DD 00:00:00");
       }
-      getLipid({ id: id, start: start, end: end })
-        .then(res => {
-          if (res.errcode == 0) {
-            this.data = res.result;
-            let temp = [];
-            this.data.forEach(item => {
-              temp.push({ time: item.time, num: item.num });
-            });
-
-            this.chart.changeData(temp);
-            this.chart.render();
-          } else {
-            throw res.msg;
-          }
-        })
-        .catch(err => {
-          Toast.fail({
-            message: err ? err : "网络异常"
+      getLipid({ id: id, start: start, end: end }).then(res => {
+        console.log(res);
+        if (res.errcode == 0) {
+          this.data = res.result;
+          let temp = [];
+          this.data.forEach(item => {
+            temp.push({ time: item.time, num: item.num });
           });
-        });
+          this.chart.changeData(temp);
+        } else {
+          throw res.msg;
+        }
+      });
+      // .catch(err => {
+      //   Toast.fail({
+      //     message: err ? err : "网络异常"
+      //   });
+      // });
     },
     add() {
       this.visible = true;
@@ -144,8 +149,19 @@ export default {
         let id = this.$ls.get("User").id;
         addLipid({ user_id: id, num: this.num })
           .then(res => {
-            if (res.errcode === 0) {
-              this.getList();
+            if (res.errcode == 0) {
+              console.log(res);
+              const chart = this.chart;
+              this.data.push({
+                ...res.result,
+                time: new moment().format("YYYY-MM-DD HH:mm:ss")
+              });
+              let temp = [];
+              this.data.forEach(item => {
+                temp.push({ time: item.time, num: item.num });
+              });
+
+              chart.changeData(temp);
               Toast.success({
                 message: res.msg
               });
@@ -172,45 +188,47 @@ export default {
     this.chart = new Chart({
       container: "c3", // 指定图表容器 ID
       width: width, // 指定图表宽度
-      height: 300 // 指定图表高度
+      height: 300, // 指定图表高度
+      padding: [10, 10, 45, 30]
     });
 
-    this.chart.data(this.data);
     this.chart.scale({
       num: {
-        max: 240,
+        max: 220
       }
     });
-    this.chart.line().position('time*num');
-    this.chart.point().position('time*num').shape('breath-point');
-    this.chart.annotation().regionFilter({
+    this.chart
+      .line()
+      .position("time*num")
+      .shape("smooth");
+
+    this.chart.guide().regionFilter({
       top: true,
-      start: ['min', 105],
-      end: ['max', 85],
-      color: '#ff4d4f'
+      start: ["min", 999],
+      end: ["max", 200],
+
+      color: "#ff4d4f",
+      apply: ["line"]
     });
-    this.chart.annotation().line({
-      start: ['min', 200],
-      end: ['max', 200],
-      style: {
-        stroke: '#ff4d4f',
-        lineWidth: 1,
-        lineDash: [3, 3]
+    this.chart.guide().line({
+      start: ["min", 200],
+      end: ["max", 200],
+      lineStyle: {
+        stroke: "#F5222D",
+        lineWidth: 2
       },
       text: {
-        position: 'start',
+        position: "start",
         style: {
-          fill: '#8c8c8c',
+          fill: "#8c8c8c",
           fontSize: 15,
-          fontWeight: 'normal'
+          fontWeight: "normal"
         },
-        content: '危险线',
+        content: "危险线",
         offsetY: -5
       }
     });
 
-    this.chart.removeInteraction('legend-filter');
-    this.chart.removeInteraction('legend-active');
     this.chart.render();
     this.getList();
   }

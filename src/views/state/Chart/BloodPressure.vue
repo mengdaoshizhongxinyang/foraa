@@ -27,7 +27,8 @@
       style="padding:8px;text-align:center"
       @confirm="handleConfirm"
     >
-      <a-input-number v-model="num" style="margin:8px;" :min="0"></a-input-number>
+      <a-input-number v-model="num" style="margin:8px;" :min="0"></a-input-number>~
+      <a-input-number v-model="num_max" style="margin:8px;" :min="0"></a-input-number>
     </vanDialog>
   </div>
 </template>
@@ -54,6 +55,7 @@ export default {
       show: "table",
       data: [],
       num: null,
+      num_max: null,
       visible: false,
       timeSelect: "week",
       columns: [
@@ -62,8 +64,12 @@ export default {
           dataIndex: "time"
         },
         {
-          title: "记录数据",
+          title: "舒张压",
           dataIndex: "num"
+        },
+        {
+          title: "收缩压",
+          dataIndex: "num_max"
         },
         {
           title: "操作",
@@ -117,11 +123,15 @@ export default {
             this.data = res.result;
             let temp = [];
             this.data.forEach(item => {
-              temp.push({ time: item.time, num: item.num });
+              temp.push({
+                time: item.time,
+                num: item.num,
+                num_max: item.num_max
+              });
+              // temp.push({ time: item.time, num: item.num_max,type:'收缩压' });
             });
 
             this.chart.changeData(temp);
-            this.chart.render();
           } else {
             throw res.msg;
           }
@@ -147,10 +157,22 @@ export default {
       } else {
         console.log("dss");
         let id = this.$ls.get("User").id;
-        addBloodPressure({ user_id: id, num: this.num })
+        addBloodPressure({ user_id: id, num: this.num, num_max: this.num_max })
           .then(res => {
             if (res.errcode === 0) {
-              this.getList();
+              this.data.push({
+                ...res.result,
+                time: new moment().format("YYYY-MM-DD HH:mm:ss")
+              });
+              let temp = [];
+              this.data.forEach(item => {
+                temp.push({
+                  time: item.time,
+                  num: item.num,
+                  num_max: item.num_max
+                });
+              });
+              this.chart.changeData(temp);
               Toast.success({
                 message: res.msg
               });
@@ -168,8 +190,8 @@ export default {
     handleCancel() {
       this.visible = false;
     },
-    handleChange(){
-      this.getList()
+    handleChange() {
+      this.getList();
     }
   },
   mounted() {
@@ -177,37 +199,78 @@ export default {
     this.chart = new Chart({
       container: "c2", // 指定图表容器 ID
       width: width, // 指定图表宽度
-      height: 300 // 指定图表高度
+      height: 300, // 指定图表高度
+      padding: [10, 10, 45, 30]
     });
 
-    this.chart.data(this.data);
     this.chart.scale({
       num: {
-        alias: "血压",
-        nice: true
+        max: 150
+      }
+    });
+
+    this.chart
+      .line()
+      .position("time*num")
+      .shape("smooth");
+    this.chart
+      .line()
+      .position("time*num_max")
+      .shape("smooth");
+    this.chart.guide().regionFilter({
+      top: true,
+      start: ["min", 120],
+      end: ["max", 80],
+
+      color: "orange",
+      apply: ["line"]
+    });
+    this.chart.guide().regionFilter({
+      top: true,
+      start: ["min", 999],
+      end: ["max", 120],
+
+      color: "#f27548",
+      apply: ["line"]
+    });
+    this.chart.guide().line({
+      start: ["min", 80],
+      end: ["max", 80],
+      lineStyle: {
+        stroke: "orange",
+        lineWidth: 2
       },
-      time: {
-        range: [0, 1]
+      text: {
+        position: "start",
+        style: {
+          fill: "#8c8c8c",
+          fontSize: 15,
+          fontWeight: "normal"
+        },
+        content: "舒张压危险线",
+        offsetY: -5
       }
     });
-    this.chart.tooltip({
-      showCrosshairs: true,
-      shared: true
-    });
-    this.chart.axis("time", {
-      label: {
-        formatter: val => {
-          let a = val.split("-");
-          let arr = [];
-          arr.push(a[1]);
-          arr.push(a[2]);
-          return arr.join("-");
-        }
+    this.chart.guide().line({
+      start: ["min", 120],
+      end: ["max", 120],
+      lineStyle: {
+        stroke: "#f27548",
+        lineWidth: 2
+      },
+      text: {
+        position: "start",
+        style: {
+          fill: "#8c8c8c",
+          fontSize: 15,
+          fontWeight: "normal"
+        },
+        content: "收缩压危险线",
+        offsetY: -5
       }
     });
-    this.chart.area().position("time*num");
-    this.chart.line().position("time*num");
     this.chart.render();
+    this.getList();
     this.getList();
   }
 };

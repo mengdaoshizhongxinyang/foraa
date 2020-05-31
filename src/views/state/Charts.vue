@@ -1,7 +1,7 @@
 <template>
   <div>
     <tabs v-model="active">
-      <tab title="体重">
+      <tab title="血糖">
         <Weight></Weight>
       </tab>
       <tab title="血压">

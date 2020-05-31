@@ -23,7 +23,7 @@
     <vanDialog
       v-model="visible"
       :show-cancel-button="true"
-      title="请输入体重"
+      title="请输入血糖"
       style="padding:8px;text-align:center"
       @confirm="handleConfirm"
     >
@@ -117,14 +117,13 @@ export default {
             });
 
             this.chart.changeData(temp);
-            this.chart.render();
           } else {
             throw res.msg;
           }
         })
         .catch(err => {
           Toast.fail({
-            message: err?err:"网络异常"
+            message: err ? err : "网络异常"
           });
         });
     },
@@ -136,17 +135,26 @@ export default {
       let toast = Toast.loading({
         message: "记录中..."
       });
+
       if (!this.num) {
         Toast.fail({
           message: "请输入正确数字"
         });
       } else {
-        console.log("dss");
         let id = this.$ls.get("User").id;
         addWeight({ user_id: id, num: this.num })
           .then(res => {
             if (res.errcode === 0) {
-              this.getList();
+              let temp = [];
+              this.data.push({
+                ...res.result,
+                time: new moment().format("YYYY-MM-DD HH:mm:ss")
+              });
+              this.data.forEach(item => {
+                temp.push({ time: item.time, num: item.num });
+              });
+
+              this.chart.changeData(temp);
               Toast.success({
                 message: res.msg
               });
@@ -156,7 +164,7 @@ export default {
           })
           .catch(err => {
             Toast.fail({
-              message: err?err:"网络异常"
+              message: err ? err : "网络异常"
             });
           });
       }
@@ -164,8 +172,8 @@ export default {
     handleCancel() {
       this.visible = false;
     },
-    handleChange(){
-      this.getList()
+    handleChange() {
+      this.getList();
     }
   },
   mounted() {
@@ -173,36 +181,43 @@ export default {
     this.chart = new Chart({
       container: "c1", // 指定图表容器 ID
       width: width, // 指定图表宽度
-      height: 300 // 指定图表高度
+      height: 300, // 指定图表高度
+      padding: [10, 10, 45, 30]
     });
 
-    this.chart.data(this.data);
-    this.chart.scale({
-      num: {
-        alias: "体重",
-        nice: true
+    this.chart.scale({});
+    this.chart
+      .line()
+      .position("time*num")
+      .shape("smooth");
+
+    this.chart.guide().regionFilter({
+      top: true,
+      start: ["min", 999],
+      end: ["max", 11.8],
+
+      color: "#ff4d4f",
+      apply: ["line"]
+    });
+    this.chart.guide().line({
+      start: ["min", 11.8],
+      end: ["max", 11.8],
+      lineStyle: {
+        stroke: "#f5222D",
+        lineWidth: 2
       },
-      time: {
-        range: [0, 1]
+      text: {
+        position: "start",
+        style: {
+          fill: "#8c8c8c",
+          fontSize: 15,
+          fontWeight: "normal"
+        },
+        content: "危险线",
+        offsetY: -5
       }
     });
-    this.chart.tooltip({
-      showCrosshairs: true,
-      shared: true
-    });
-    this.chart.axis("time", {
-      label: {
-        formatter: val => {
-            let a=val.split('-')
-            let arr=[]
-            arr.push(a[1]);
-            arr.push(a[2])
-            return arr.join('-')
-        }
-      }
-    });
-    this.chart.area().position("time*num");
-    this.chart.line().position("time*num");
+
     this.chart.render();
     this.getList();
   }

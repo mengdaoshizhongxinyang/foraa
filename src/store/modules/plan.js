@@ -9,6 +9,17 @@ const user = {
   mutations: {
     SET_PLAN:(state,plan)=>{
       state.plan=plan
+    },
+    ADD_PLAN:(state,plan)=>{
+      state.plan.push(plan)
+    },
+    DEL_PLAN:(state,id)=>{
+      for(let i=0;i<state.plan.length;i++){
+        if(state.plan[i].id==id){
+          state.plan.splice(i,1)
+          break;
+        }
+      }
     }
   },
 
@@ -31,6 +42,12 @@ const user = {
           reject(error)
         })
       })
+    },
+    addPlan({commit},plan){
+      commit('ADD_PLAN', plan)
+    },
+    delPlan({commit},id){
+      commit('DEL_PLAN', id)
     }
 
   }

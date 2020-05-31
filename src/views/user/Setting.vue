@@ -78,7 +78,7 @@
 import moment from "moment";
 import { Plan } from "@/components/Plan";
 import { getPlan, addPlan, delPlan, updatePlan } from "@/api/show/plan.js";
-
+import { mapState, mapActions } from "vuex";
 import { Toast } from "vant";
 import "vant/lib/toast/style";
 export default {
@@ -89,17 +89,32 @@ export default {
       visible: false,
       form: null,
       list: [],
-      filterList: []
+      // filterList: []
     };
   },
   created() {
     this.date = moment().format("d");
     this.form = this.$form.createForm(this, { name: "coordinated" });
-    this.getList();
   },
   components: {
     Plan
   },
+  computed: mapState({
+    filterList: state => {
+      let arr = state.plan.plan
+        .filter(item => {
+          return item.date === 7 || item.date == new moment().format("d");
+        })
+        .sort((a, b) => {
+          if(a.start > b.start){
+            return 1
+          }else{
+             return -1
+          }
+        });
+      return arr;
+    }
+  }),
   methods: {
     handleChange(v) {
       this.filterList = this.list.filter(item => {
@@ -121,10 +136,9 @@ export default {
           addPlan(data)
             .then(res => {
               if (res.errcode === 0) {
-                this.list.push(res.data);
-                if (res.result.date === this.date) {
-                  this.filterList.push(res.result);
-                }
+                console.log(res)
+                this.$store.dispatch('addPlan',res.result)
+
                 Toast.success(res.msg);
               } else {
                 throw res.msg;
@@ -150,7 +164,7 @@ export default {
       delPlan(id)
         .then(res => {
           if (res.errcode === 0) {
-            this.getList();
+            this.$store.dispatch('delPlan',id)
             Toast.success(res.msg);
           } else {
             throw res.msg;

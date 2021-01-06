@@ -11,7 +11,7 @@
     "@antv/data-set": "^0.11.4",
     "@antv/g2": "3.5.1",
     "ant-design-vue": "^1.4.11",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "babel-runtime": "^6.26.0",
     "core-js": "^2.6.5",
     "md5": "^2.2.1",
